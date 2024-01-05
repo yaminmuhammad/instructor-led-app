@@ -19,8 +19,8 @@ type DBConfig struct {
 	Driver   string
 }
 
-type APIConfig struct {
-	APIPort string
+type ApiConfig struct {
+	ApiPort string
 }
 
 type TokenConfig struct {
@@ -32,7 +32,7 @@ type TokenConfig struct {
 
 type Config struct {
 	DBConfig
-	APIConfig
+	ApiConfig
 	TokenConfig
 }
 
@@ -50,9 +50,10 @@ func (c *Config) ConfigConfiguration() error {
 		Driver:   os.Getenv("DB_DRIVER"),
 	}
 
-	c.APIConfig = APIConfig{os.Getenv("API_PORT")}
+	c.ApiConfig = ApiConfig{ApiPort: os.Getenv("API_PORT")}
 
 	tokenExpire, _ := strconv.Atoi(os.Getenv("TOKEN_EXPIRE"))
+
 	c.TokenConfig = TokenConfig{
 		IssuerName:       os.Getenv("TOKEN_ISSUE"),
 		JwtSignatureKey:  []byte(os.Getenv("TOKEN_SECRET")),
@@ -60,25 +61,9 @@ func (c *Config) ConfigConfiguration() error {
 		JwtExpiresTime:   time.Duration(tokenExpire) * time.Minute,
 	}
 
-	switch {
-	case c.Host == "":
-		c.Host = "localhost"
-	case c.Port == "":
-		c.Port = "5432"
-	case c.User == "":
-		c.User = "postgres"
-	case c.Password == "":
-		c.Password = "postgres"
-	case c.Driver == "":
-		c.Driver = "postgres"
-	case c.Name == "":
-		c.Name = "postgres"
-	case c.APIPort == "":
-		c.APIPort = "8080"
-	case c.IssuerName == "":
-		c.IssuerName = "Rizkyyullah"
-	case c.JwtExpiresTime <= 0:
-		c.JwtExpiresTime = 5
+	if c.Host == "" || c.Port == "" || c.User == "" || c.Name == "" || c.Driver == "" || c.ApiPort == "" ||
+		c.IssuerName == "" || c.JwtExpiresTime < 0 || len(c.JwtSignatureKey) == 0 {
+		return fmt.Errorf("missing required environment")
 	}
 
 	return nil

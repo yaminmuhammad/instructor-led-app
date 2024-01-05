@@ -80,7 +80,7 @@ func NewServer() *Server {
 	authUc := usecase.NewAuthUseCase(UserUsecase, jwtService)
 
 	engine := gin.Default()
-	port := fmt.Sprintf(":%s", config.APIPort)
+	port := fmt.Sprintf(":%s", config.ApiPort)
 	return &Server{
 		trainerUseCase,
 		participantUseCase,
