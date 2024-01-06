@@ -83,7 +83,6 @@ CREATE TABLE questions (
   id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
   question TEXT,
   answer TEXT,
-  answer TEXT,
   STATUS question_status,
   participant_id uuid NOT NULL,
   trainer_id uuid NOT NULL,
@@ -105,12 +104,13 @@ CREATE TABLE schedule_images (
 );
 
 INSERT INTO
-  users(name, email, username, hash_password, role)
+  users(name, email, username, address, hash_password, role)
 VALUES
   (
     'Iqi Tes',
     'iqi@mail.com',
     'iqi',
+    'Cirebon',
     'password',
     'participants'
   );

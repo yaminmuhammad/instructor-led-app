@@ -162,6 +162,7 @@ func (t *userRepository) getCreatedUser(user entity.User) (entity.User, error) {
 		user.UpdatedAt).Scan(
 		&createdUser.Id,
 		&createdUser.CreatedAt,
+		&createdUser.UpdatedAt,
 	)
 	if err != nil {
 		log.Println("userRepository.QueryRow:", err.Error())
@@ -175,10 +176,19 @@ func (t *userRepository) getCreatedUser(user entity.User) (entity.User, error) {
 	createdUser.Hashpassword = string(hashedPassword)
 	createdUser.Role = user.Role
 
-	err = t.addParticipant(createdUser)
-	if err != nil {
-		log.Println("userRepository.getCreatedUser: Error adding Participant:", err.Error())
-		return entity.User{}, err
+	// Menentukan apakah user adalah participant atau trainer
+	if user.Role == "participant" {
+		err = t.addParticipant(createdUser)
+		if err != nil {
+			log.Println("userRepository.getCreatedUser: Error adding Participant:", err.Error())
+			return entity.User{}, err
+		}
+	} else if user.Role == "trainer" {
+		err = t.addTrainer(createdUser)
+		if err != nil {
+			log.Println("userRepository.getCreatedUser: Error adding Trainer:", err.Error())
+			return entity.User{}, err
+		}
 	}
 
 	return createdUser, nil
@@ -187,13 +197,29 @@ func (t *userRepository) getCreatedUser(user entity.User) (entity.User, error) {
 func (t *userRepository) addParticipant(user entity.User) error {
 	//  Add user to participant table
 	_, err := t.db.Exec(config.InsertUserToParticipant,
-		user.Id,
+		// user.Id,
 		user.Id,
 		user.CreatedAt,
 		user.UpdatedAt,
 	)
 	if err != nil {
 		log.Println("userRepository.addPArticipant: Error adding Participant:", err.Error())
+		return err
+	}
+
+	return nil
+}
+
+func (t *userRepository) addTrainer(user entity.User) error {
+	//  Add user to trainer table
+	_, err := t.db.Exec(config.InsertUserToTrainer,
+		// user.Id,
+		user.Id,
+		user.CreatedAt,
+		time.Now(),
+	)
+	if err != nil {
+		log.Println("userRepository.addTrainer: Error adding Trainer:", err.Error())
 		return err
 	}
 
@@ -218,7 +244,7 @@ func (t *userRepository) Created(data entity.User) (entity.User, error) {
 		data.Address,
 		string(hashedPassword),
 		data.Role,
-		data.UpdatedAt).Scan(
+		time.Now()).Scan(
 		&user.Id,
 		&user.CreatedAt,
 	)
@@ -231,8 +257,9 @@ func (t *userRepository) Created(data entity.User) (entity.User, error) {
 	user.Email = data.Email
 	user.Username = data.Username
 	user.Address = data.Address
-	user.Hashpassword = string(hashedPassword)
+	// user.Hashpassword = string(hashedPassword)
 	user.Role = data.Role
+	user.UpdatedAt = data.UpdatedAt
 
 	return user, nil
 
