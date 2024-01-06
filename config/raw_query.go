@@ -2,7 +2,7 @@ package config
 
 const (
 	InsertTrainer      = `INSERT INTO trainers (phone_number, user_id) VALUES ($1, $2) RETURNING id, created_at, updated_at`
-	ListTrainers       = `SELECT id,phone_number,user_id, created_at,updated_at FROM trainers ORDER BY created_at DESC limit $1 OFFSET $2`
+	ListTrainers       = `SELECT id, phone_number, user_id, created_at, updated_at FROM trainers ORDER BY created_at DESC LIMIT $1 OFFSET $2`
 	GetTrainerByID     = `SELECT id,phone_number,user_id, created_at, updated_at FROM trainers WHERE id= $1`
 	GetTrainerByUserID = `SELECT id,phone_number,user_id, created_at, updated_at FROM trainers WHERE user_id= $1`
 	DeleteTrainerByID  = `DELETE FROM trainers WHERE id = $1`
