@@ -3,7 +3,6 @@ package controller
 import (
 	"instructor-led-app/config"
 	"instructor-led-app/delivery/middleware"
-	"instructor-led-app/entity"
 	"instructor-led-app/entity/dto"
 	"instructor-led-app/shared/common"
 	"instructor-led-app/usecase"
@@ -19,19 +18,6 @@ type TrainerController struct {
 	authMiddleware middleware.AuthMiddleware
 }
 
-func (t *TrainerController) createHandle(ctx *gin.Context) {
-	var payload entity.Trainer
-	if err := ctx.ShouldBindJSON(&payload); err != nil {
-		common.SendErrorResponse(ctx, http.StatusBadRequest, err.Error())
-		return
-	}
-	trainer, err := t.trainerUc.RegisterNewTrainer(payload)
-	if err != nil {
-		common.SendErrorResponse(ctx, http.StatusInternalServerError, err.Error())
-		return
-	}
-	common.SendSingleResponse(ctx, trainer, "Created")
-}
 func (t *TrainerController) listHandler(ctx *gin.Context) {
 	page, _ := strconv.Atoi(ctx.Query("page"))
 	size, _ := strconv.Atoi(ctx.Query("size"))

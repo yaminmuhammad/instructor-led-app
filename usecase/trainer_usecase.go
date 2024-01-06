@@ -11,7 +11,6 @@ import (
 )
 
 type TrainerUsecase interface {
-	RegisterNewTrainer(payload entity.Trainer) (entity.Trainer, error)
 	FindAllTrainer(page, size int) ([]entity.Trainer, model.Paging, error)
 	FindTrainerById(trainerId string) ([]entity.Trainer, error)
 	FindTrainerByUserIDs(userID string) (dto.TrainerDTO, error)
@@ -58,11 +57,6 @@ func (t *trainerUseCase) FindTrainerByUserIDs(userID string) (dto.TrainerDTO, er
 // FindAllTrainer implements TrainerUsecase.
 func (t *trainerUseCase) FindAllTrainer(page, size int) ([]entity.Trainer, model.Paging, error) {
 	return t.repo.List(page, size)
-}
-
-// registerNewTrainer implements TrainerUsecase.
-func (t *trainerUseCase) RegisterNewTrainer(payload entity.Trainer) (entity.Trainer, error) {
-	return t.repo.CreateTrainer(payload)
 }
 
 func NewTrainerUseCase(repo repository.TrainerRepository) TrainerUsecase {

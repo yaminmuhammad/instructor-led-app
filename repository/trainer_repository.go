@@ -13,7 +13,6 @@ import (
 )
 
 type TrainerRepository interface {
-	CreateTrainer(payload entity.Trainer) (entity.Trainer, error)
 	List(page, size int) ([]entity.Trainer, model.Paging, error)
 	TrainerById(trainerId string) ([]entity.Trainer, error)
 	FindByUserID(userID string) (dto.TrainerDTO, error)
@@ -142,24 +141,6 @@ func (t *trainerRepository) List(page, size int) ([]entity.Trainer, model.Paging
 }
 
 // CreateTrainer implements TrainerRepository.
-func (t *trainerRepository) CreateTrainer(payload entity.Trainer) (entity.Trainer, error) {
-	var trainer entity.Trainer
-	err := t.db.QueryRow(config.InsertTrainer,
-		payload.PhoneNumber,
-		payload.UserID).Scan(
-		&trainer.ID,
-		&trainer.CreatedAt,
-		&trainer.UpdatedAt,
-	)
-	if err != nil {
-		log.Println("trainerRepository.QueryRow:", err.Error())
-		return entity.Trainer{}, err
-	}
-	trainer.PhoneNumber = payload.PhoneNumber
-	//trainer.Specializations = payload.Specializations
-	trainer.UserID = payload.UserID
-	return trainer, nil
-}
 
 func NewTrainerRepository(db *sql.DB) TrainerRepository {
 	return &trainerRepository{db: db}
