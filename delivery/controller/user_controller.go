@@ -143,11 +143,10 @@ func (t *UserController) Route() {
 	admin := t.rg.Group(config.AdminGroup)
 	admin.POST(config.MasterDataUsersCsv, t.authMiddleware.RequireToken("admin"), t.createdByCsv) //bisa
 	admin.POST(config.MasterDataUsers, t.create)                                                  //bisa
-	// admin.POST(config.MasterDataUsers, t.authMiddleware.RequireToken("admin"), t.create)          //bisa
-	admin.GET(config.MasterDataUsers, t.authMiddleware.RequireToken("admin"), t.ListHandler)  //bisa
-	admin.GET(config.MasterDataUserByID, t.authMiddleware.RequireToken("admin"), t.getById)   //bisa
-	admin.PUT(config.MasterDataUserByID, t.authMiddleware.RequireToken("admin"), t.update)    //bisa
-	admin.DELETE(config.MasterDataUserByID, t.authMiddleware.RequireToken("admin"), t.delete) //bisa
+	admin.GET(config.MasterDataUsers, t.authMiddleware.RequireToken("admin"), t.ListHandler)      //bisa
+	admin.GET(config.MasterDataUserByID, t.authMiddleware.RequireToken("admin"), t.getById)       //bisa
+	admin.PUT(config.MasterDataUserByID, t.authMiddleware.RequireToken("admin"), t.update)        //bisa
+	admin.DELETE(config.MasterDataUserByID, t.authMiddleware.RequireToken("admin"), t.delete)     //bisa
 }
 
 func NewUserController(userUC usecase.UserUsecase, rg *gin.RouterGroup, auth middleware.AuthMiddleware) *UserController {

@@ -112,7 +112,7 @@ VALUES
     'iqi',
     'Cirebon',
     'password',
-    'participants'
+    'participant'
   );
 
 INSERT INTO

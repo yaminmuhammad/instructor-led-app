@@ -117,7 +117,7 @@ func (t *TrainerController) Route() {
 	admin := t.rg.Group(config.AdminGroup)
 
 	admin.GET(config.MasterDataTrainerByUserID, t.authMiddleware.RequireToken("admin"), t.trainerByUserIdHandler)
-	admin.POST(config.MasterDataTrainers, t.authMiddleware.RequireToken("admin"), t.createHandle)         //harusnya bisa dicover pakai csv
+	// admin.POST(config.MasterDataTrainers, t.authMiddleware.RequireToken("admin"), t.createHandle)         //harusnya bisa dicover pakai csv
 	admin.GET(config.MasterDataTrainers, t.authMiddleware.RequireToken("admin"), t.listHandler)           //bisa
 	admin.GET(config.MasterDataTrainerByID, t.authMiddleware.RequireToken("admin"), t.trainerByIdHandler) //bisa
 	admin.PUT(config.MasterDataTrainerByID, t.authMiddleware.RequireToken("admin", "trainer"), t.updatedTrainerHandler)
