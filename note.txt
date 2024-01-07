@@ -1,0 +1,23 @@
+login 
+- login admin  ✅ 
+
+trainer
+- list trainer  ✅ 
+- get trainer by id  ✅
+- update trainer  ✅
+- delete trainer  ✅ but not delete user on users table ⛔
+- upload proof image 
+
+participant 
+- get schedule by participant
+- participant can create question  ❌ (error : failed to get participantID)
+- create participant
+- get list participant
+- get participant by id
+
+
+
+
+
+
+Flow => Create user or Insert user as Admin => Insert data trainer and participant via csv =>  
