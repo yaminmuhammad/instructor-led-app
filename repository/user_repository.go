@@ -32,11 +32,9 @@ type userRepository struct {
 	db *sql.DB
 }
 
-// GetUserIDByName implements UserRepository.
 func (t *userRepository) GetUserIDByName(name string) (dto.UserId, error) {
 	var userId dto.UserId
 
-	// Query user data based on the email
 	err := t.db.QueryRow(config.GetUserIDbyName, name).Scan(&userId.Id)
 	if err != nil {
 		log.Println("userRepository.GetUser:", err.Error())
@@ -226,7 +224,6 @@ func (t *userRepository) addTrainer(user entity.User) error {
 	return nil
 }
 
-// Created implements UserRepository.
 func (t *userRepository) Created(data entity.User) (entity.User, error) {
 	var user entity.User
 
